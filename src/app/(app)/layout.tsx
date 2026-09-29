@@ -1,4 +1,4 @@
-import { requireUser } from '@/lib/auth/requireUser';
+import { requireUser } from "@/lib/auth/requireUser";
 
 export default async function AppLayout({
   children,
