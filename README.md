@@ -76,7 +76,52 @@ Database juga memiliki trigger untuk membuat profil otomatis, memperbarui previe
 - `src/lib/supabase`: client server, client browser, dan refresh session middleware.
 - `src/lib/validation`: schema Zod untuk input aplikasi.
 - `src/types`: type contract untuk profile, conversation, message, dan action result.
-- `docs`: PRD, arsitektur, progress, serta handoff pengembangan.
+- `docs`: [PRD](docs/PRD.md) dan [Architecture](docs/ARCHITECTURE.md), sumber requirement produk dan keputusan teknis.
+
+## Status PRD dan Architecture
+
+Status berikut dinilai dari source dan konfigurasi saat ini. "Terimplementasi" berarti ada implementasinya di codebase, bukan klaim bahwa alur sudah lulus pengujian end-to-end.
+
+### Fitur Wajib
+
+| Requirement PRD                        | Status                             | Catatan                                                                                                                                                                                                                                                           |
+| -------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| FR-1 Login/logout dan proteksi rute    | Terimplementasi                    | Middleware, `requireUser()`, Server Actions, pesan login generik, dan safe redirect tersedia.                                                                                                                                                                     |
+| FR-2 Mulai chat baru                   | Sebagian                           | Search, exclude diri sendiri, validasi server/RPC, dan conversation idempotent tersedia. Memilih user langsung membuat chat; PRD meminta pilihan lalu tombol **Mulai chat**.                                                                                      |
+| FR-3 Kirim/terima dan pagination pesan | Terimplementasi                    | Persisten, plain text, optimistic send, retry, pagination 50 pesan. Receipt: satu centang saat penerima offline, dua abu-abu saat online tetapi belum membaca, dua biru setelah `read_at` terkonfirmasi.                                                          |
+| FR-4 Daftar chat                       | Terimplementasi                    | Nama, preview, waktu lokal Asia/Jakarta, sorting, search, dan empty state tersedia.                                                                                                                                                                               |
+| FR-5 Isolasi data                      | Sebagian: kontrol ada, bukti belum | RLS, session checks, participant checks, dan tidak ada policy update/delete pesan. Script `verify-rls` dan hasil uji yang diminta PRD belum tersedia. Column-level grants untuk melarang klien mengisi `created_at`/`read_at` juga belum diterapkan di migration. |
+| FR-6 Light/dark mode                   | Terimplementasi                    | `next-themes` tersedia di login, register, dan chat; preferensi tema disimpan.                                                                                                                                                                                    |
+| FR-7 Brand                             | Terimplementasi di source          | Nunito, token warna, serta aset logo dark/light dari `public/logo` dipakai. Pemeriksaan visual semua layar belum dilakukan.                                                                                                                                       |
+
+### Fitur Bonus
+
+| Bonus PRD           | Status                    | Catatan                                                                                                                                             |
+| ------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| B-1 Realtime        | Terimplementasi di source | Satu channel chat, event pesan/conversation, update read receipt, serta refresh saat reconnect/fokus. Perlu uji dua akun untuk membuktikan runtime. |
+| B-2 Registrasi      | Terimplementasi           | Registrasi dan validasi password; setelah daftar kembali ke login dengan instruksi aktivasi. Email confirmation mengikuti konfigurasi Supabase.     |
+| B-3 Tema tersimpan  | Terimplementasi           | Disediakan oleh `next-themes` dengan `localStorage`.                                                                                                |
+| B-4a Unread badge   | Terimplementasi di source | Unread count dari RPC dan mark-as-read tersedia; perlu uji lintas akun.                                                                             |
+| B-4b Cari chat      | Terimplementasi           | Filter lokal atas nama dan preview percakapan. Pencarian pengguna memakai debounce 250 ms.                                                          |
+| B-4c Status online  | Sebagian                  | Presence online/offline tersedia; authorization channel privat dan uji isolasinya belum dikonfigurasi/dibuktikan.                                   |
+| B-5 Tampilan mobile | Sebagian                  | Layout daftar/thread satu panel tersedia. Target composer 44 px, safe-area keyboard, dan uji viewport belum diverifikasi.                           |
+
+### Penilaian Berdasarkan Prioritas
+
+1. **Fitur wajib:** mayoritas tersedia; FR-2 belum memenuhi alur pilih pengguna lalu konfirmasi, dan perlu dites end-to-end.
+2. **Keamanan akses data dan secret:** middleware, `requireUser()`, validasi server, anon key, dan RLS ada. Sebelum dinyatakan lulus, tambahkan/verifikasi column-level grants, konfigurasi akses Realtime presence, dan jalankan pengujian RLS langsung sebagai beberapa akun. `.env*` lokal diabaikan Git; hanya `.env.example` yang diizinkan masuk repository.
+3. **Kerapian kode, README, dan infrastruktur:** struktur route/component terpisah, typecheck/lint/build tersedia, cron health dan region `sin1` dikonfigurasi. Belum ada automated unit/E2E test atau script `verify-rls`.
+4. **Brand light/dark:** font Nunito, token tema, dan dua aset logo sudah dipasang. Kontras WCAG dan tampilan aktual kedua mode masih perlu pemeriksaan visual.
+5. **Bonus:** realtime, tema tersimpan, unread, pencarian, registrasi, dan presence tersedia; tingkat kepastian runtime berbeda karena pengujian multi-user belum otomatis.
+
+### Gap Teknis dari Architecture
+
+- Migration belum memberi grants minimum per kolom untuk tabel `messages`; RLS membatasi peserta dan `sender_id`, tetapi belum melarang klien mengirim nilai `created_at` atau `read_at` pada insert langsung ke Supabase.
+- Belum ada automated `verify-rls`, unit, atau end-to-end tests.
+- Presence memakai topic bersama `presence:online`; policy Realtime privat belum disiapkan.
+- Dialog memakai custom overlay (Escape tersedia), belum memakai native `<dialog>`/focus trap seperti target aksesibilitas Architecture.
+- Kursor pagination memakai `created_at` saja, bukan pasangan `(created_at, id)` yang direkomendasikan Architecture untuk timestamp yang sama.
+- CSP masih mengizinkan `'unsafe-inline'`; mobile safe-area/keyboard, visual contrast, dan Lighthouse target belum diverifikasi.
 
 ## AI Tools yang Digunakan
 

@@ -1,26 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Search, Plus, MessageSquare } from 'lucide-react';
-import { useChat } from '@/components/chat/ChatProvider';
-import { Avatar } from '@/components/ui/Avatar';
-import { Badge } from '@/components/ui/Badge';
-import { Skeleton } from '@/components/ui/Skeleton';
-import { formatListTime } from '@/lib/format/time';
-import type { ConversationItem } from '@/types/db';
+import { useState, useMemo } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Search, Plus, MessageSquare } from "lucide-react";
+import { useChat } from "@/components/chat/ChatProvider";
+import { Avatar } from "@/components/ui/Avatar";
+import { Badge } from "@/components/ui/Badge";
+import { formatListTime } from "@/lib/format/time";
+import type { ConversationItem } from "@/types/db";
 
-export function Sidebar({
-  onNewChat,
-  loaded,
-}: {
-  onNewChat: () => void;
-  loaded: boolean;
-}) {
+export function Sidebar({ onNewChat }: { onNewChat: () => void }) {
   const { conversations, onlineUsers } = useChat();
   const pathname = usePathname();
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
     if (!search.trim()) return conversations;
@@ -28,7 +21,7 @@ export function Sidebar({
     return conversations.filter(
       (c) =>
         c.other_name.toLowerCase().includes(q) ||
-        (c.last_message_preview ?? '').toLowerCase().includes(q)
+        (c.last_message_preview ?? "").toLowerCase().includes(q),
     );
   }, [conversations, search]);
 
@@ -38,13 +31,15 @@ export function Sidebar({
       <div className="p-3 space-y-2 shrink-0">
         <button
           onClick={onNewChat}
-          className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-accent-bg text-accent-fg px-4 py-2.5 text-sm font-semibold shadow-soft hover:opacity-90 transition-opacity active:scale-[0.98]"
-        >
+          className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-accent-bg text-accent-fg px-4 py-2.5 text-sm font-semibold shadow-soft hover:opacity-90 transition-opacity active:scale-[0.98]">
           <Plus size={16} />
           Chat baru
         </button>
         <div className="relative">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-fg-muted" />
+          <Search
+            size={16}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-fg-muted"
+          />
           <input
             type="text"
             value={search}
@@ -57,27 +52,15 @@ export function Sidebar({
 
       {/* Conversation List */}
       <div className="flex-1 overflow-y-auto px-2 pb-2">
-        {!loaded ? (
-          <div className="space-y-1 p-2">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="flex items-center gap-3 p-3">
-                <Skeleton className="w-10 h-10 rounded-full" />
-                <div className="flex-1 space-y-2">
-                  <Skeleton className="h-3 w-24" />
-                  <Skeleton className="h-3 w-40" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : filtered.length === 0 ? (
+        {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
             <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center mb-3">
               <MessageSquare size={24} className="text-fg-muted" />
             </div>
             <p className="text-sm text-fg-muted">
               {search.trim()
-                ? 'Tidak ada percakapan yang cocok.'
-                : 'Belum ada percakapan'}
+                ? "Tidak ada percakapan yang cocok."
+                : "Belum ada percakapan"}
             </p>
             {!search.trim() && (
               <p className="text-xs text-fg-muted mt-1">
@@ -115,9 +98,8 @@ function ConversationItem({
     <Link
       href={`/chat/${conv.id}`}
       className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors ${
-        active ? 'bg-surface' : 'hover:bg-surface/60'
-      }`}
-    >
+        active ? "bg-surface" : "hover:bg-surface/60"
+      }`}>
       <Avatar name={conv.other_name} id={conv.other_id} online={online} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2">
@@ -132,7 +114,7 @@ function ConversationItem({
         </div>
         <div className="flex items-center justify-between gap-2 mt-0.5">
           <span className="text-[13px] text-fg-muted truncate">
-            {conv.last_message_preview ?? 'Belum ada pesan'}
+            {conv.last_message_preview ?? "Belum ada pesan"}
           </span>
           {conv.unread_count > 0 && <Badge count={conv.unread_count} />}
         </div>

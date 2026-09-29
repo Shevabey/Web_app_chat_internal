@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 
 export function Logo() {
   return (
     <div className="flex items-center gap-2">
       <Image
-        src="/brand/logo-black.svg"
+        src="/logo/Akselera%20Tech%20dark%20logo.png"
         alt="Akselera.Tech"
-        width={140}
-        height={28}
-        className="h-7 w-auto dark:hidden"
+        width={180}
+        height={40}
+        className="h-20 w-auto object-contain dark:hidden"
         priority
       />
       <Image
-        src="/brand/logo-white.svg"
+        src="/logo/Akselera%20Tech%20white%20logo.png"
         alt="Akselera.Tech"
-        width={140}
-        height={28}
-        className="h-7 w-auto hidden dark:block"
+        width={180}
+        height={40}
+        className="hidden h-20 w-auto object-contain dark:block"
         priority
       />
     </div>

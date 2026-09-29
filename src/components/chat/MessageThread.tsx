@@ -41,22 +41,36 @@ export function MessageThread({
 
   // Subscribe to realtime messages for this conversation
   useEffect(() => {
-    const unsubscribe = subscribeToMessages(conversation.id, (msg: Message) => {
-      setMessages((prev) => {
-        // Deduplicate by id (optimistic send may already have this id)
-        if (prev.some((m) => m.id === msg.id)) {
-          return prev.map((m) =>
-            m.id === msg.id ? { ...msg, status: "sent" as const } : m,
+    const unsubscribe = subscribeToMessages(
+      conversation.id,
+      (msg: Message, event) => {
+        if (event === "UPDATE") {
+          setMessages((prev) =>
+            prev.map((message) =>
+              message.id === msg.id
+                ? { ...message, read_at: msg.read_at }
+                : message,
+            ),
           );
+          return;
         }
-        return [...prev, msg];
-      });
 
-      // If message is from the other person, mark as read
-      if (msg.sender_id !== currentUserId) {
-        markRead(conversation.id).then(() => clearUnread(conversation.id));
-      }
-    });
+        setMessages((prev) => {
+          // Deduplicate by id (optimistic send may already have this id)
+          if (prev.some((m) => m.id === msg.id)) {
+            return prev.map((m) =>
+              m.id === msg.id ? { ...msg, status: "sent" as const } : m,
+            );
+          }
+          return [...prev, msg];
+        });
+
+        // If message is from the other person, mark as read
+        if (msg.sender_id !== currentUserId) {
+          markRead(conversation.id).then(() => clearUnread(conversation.id));
+        }
+      },
+    );
     return unsubscribe;
   }, [conversation.id, currentUserId, subscribeToMessages, clearUnread]);
 
@@ -206,8 +220,8 @@ export function MessageThread({
           key={msg.id}
           message={msg}
           isMine={isMine}
+          recipientOnline={otherOnline}
           status={msg.status}
-          senderName={conversation.other_name}
           grouped={grouped}
           onRetry={() => handleRetry(msg.id)}
         />,

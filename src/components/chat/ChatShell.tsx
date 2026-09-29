@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
-import { ChatProvider } from '@/components/chat/ChatProvider';
-import { Sidebar } from '@/components/chat/Sidebar';
-import { NewChatDialog } from '@/components/chat/NewChatDialog';
-import { AppHeader } from '@/components/layout/AppHeader';
-import type { ConversationItem, Profile } from '@/types/db';
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { ChatProvider } from "@/components/chat/ChatProvider";
+import { Sidebar } from "@/components/chat/Sidebar";
+import { NewChatDialog } from "@/components/chat/NewChatDialog";
+import { AppHeader } from "@/components/layout/AppHeader";
+import type { ConversationItem, Profile } from "@/types/db";
 
 export function ChatShell({
   children,
@@ -21,7 +21,7 @@ export function ChatShell({
 }) {
   const pathname = usePathname();
   const [newChatOpen, setNewChatOpen] = useState(false);
-  const isConversation = pathname.startsWith('/chat/') && pathname !== '/chat';
+  const isConversation = pathname.startsWith("/chat/") && pathname !== "/chat";
 
   return (
     <ChatProvider initialConversations={initialConversations} userId={userId}>
@@ -30,16 +30,14 @@ export function ChatShell({
         <div className="flex-1 flex overflow-hidden">
           <div
             className={`shrink-0 w-full md:w-80 lg:w-80 ${
-              isConversation ? 'hidden md:block' : 'block'
-            }`}
-          >
-            <Sidebar loaded={true} onNewChat={() => setNewChatOpen(true)} />
+              isConversation ? "hidden md:block" : "block"
+            }`}>
+            <Sidebar onNewChat={() => setNewChatOpen(true)} />
           </div>
           <div
             className={`flex-1 min-w-0 ${
-              isConversation ? 'block' : 'hidden md:block'
-            }`}
-          >
+              isConversation ? "block" : "hidden md:block"
+            }`}>
             {children}
           </div>
         </div>
