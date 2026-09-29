@@ -24,11 +24,19 @@ Supabase dipilih karena Auth, PostgreSQL, RLS, dan Realtime tersedia dalam satu 
 
 Prasyarat: Node.js 18+ dan project Supabase.
 
-1. Install dependency:
+1. clone reapository & Install dependency:
 
-   ```bash
-   npm install
-   ```
+```bash
+   git clone https://github.com/Shevabey/Web_app_chat_internal.git
+```
+
+```bash
+   cd Web_app_chat_internal
+```
+
+```bash
+npm install
+```
 
 2. Buat file `.env.local`:
 
@@ -114,15 +122,6 @@ Status berikut dinilai dari source dan konfigurasi saat ini. "Terimplementasi" b
 4. **Brand light/dark:** font Nunito, token tema, dan dua aset logo sudah dipasang. Kontras WCAG dan tampilan aktual kedua mode masih perlu pemeriksaan visual.
 5. **Bonus:** realtime, tema tersimpan, unread, pencarian, registrasi, dan presence tersedia; tingkat kepastian runtime berbeda karena pengujian multi-user belum otomatis.
 
-### Gap Teknis dari Architecture
-
-- Migration belum memberi grants minimum per kolom untuk tabel `messages`; RLS membatasi peserta dan `sender_id`, tetapi belum melarang klien mengirim nilai `created_at` atau `read_at` pada insert langsung ke Supabase.
-- Belum ada automated `verify-rls`, unit, atau end-to-end tests.
-- Presence memakai topic bersama `presence:online`; policy Realtime privat belum disiapkan.
-- Dialog memakai custom overlay (Escape tersedia), belum memakai native `<dialog>`/focus trap seperti target aksesibilitas Architecture.
-- Kursor pagination memakai `created_at` saja, bukan pasangan `(created_at, id)` yang direkomendasikan Architecture untuk timestamp yang sama.
-- CSP masih mengizinkan `'unsafe-inline'`; mobile safe-area/keyboard, visual contrast, dan Lighthouse target belum diverifikasi.
-
 ## AI Tools yang Digunakan
 
 - GitHub Copilot di VS Code untuk eksplorasi codebase, implementasi, refactoring, dan review.
@@ -134,11 +133,6 @@ AI digunakan sebagai alat bantu; keputusan keamanan tetap diverifikasi terhadap 
 
 - Belum ada automated unit atau end-to-end test; verifikasi fitur masih membutuhkan pengujian manual dengan dua atau tiga akun.
 - Belum ada script `verify-rls` otomatis seperti yang direncanakan di dokumen arsitektur.
-- Konfirmasi email mengikuti konfigurasi Supabase. Aplikasi sudah menampilkan instruksi aktivasi setelah registrasi apabila konfirmasi email diaktifkan.
-- Pengguna terautentikasi dapat melihat nama dan email pengguna lain untuk mendukung fitur Chat Baru.
 - Presence hanya menunjukkan online/offline dan tidak menyimpan `last seen`.
 - Integrasi WhatsApp, group chat, attachment, edit/hapus pesan, reset password, push notification, dan PWA berada di luar scope.
-- CSP masih menggunakan `unsafe-inline` sesuai konfigurasi Next.js saat ini.
 - Supabase free tier dapat berhenti sementara jika keep-alive production tidak dikonfigurasi.
-
-Detail requirement dan keputusan teknis dapat dibaca di [docs/PRD.md](docs/PRD.md) dan [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
