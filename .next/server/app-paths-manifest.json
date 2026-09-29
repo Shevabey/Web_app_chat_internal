@@ -1,0 +1,8 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
+  "/(auth)/register/page": "app/(auth)/register/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/(app)/chat/page": "app/(app)/chat/page.js",
+  "/(app)/chat/[conversationId]/page": "app/(app)/chat/[conversationId]/page.js"
+}
