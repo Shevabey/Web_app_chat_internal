@@ -26,3 +26,6 @@ coverage/
 *.sw?
 .env*
 !.env.example
+
+# Local interview preparation; keep out of the public repository.
+/docs/INTERVIEW_GUIDE.md

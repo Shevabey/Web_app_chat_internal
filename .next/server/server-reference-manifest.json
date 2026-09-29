@@ -101,6 +101,16 @@
         "app/(app)/chat/page": "action-browser",
         "app/(auth)/register/page": "action-browser"
       }
+    },
+    "62e343bf09d9e1d12cc060cad24c3bd0d7d87481": {
+      "workers": {
+        "app/(app)/chat/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5CPortofolio%5C%5Cbaru%5C%5CWeb_app_chat_internal_akselera_tech%5C%5Csrc%5C%5Capp%5C%5C(app)%5C%5Cchat%5C%5Cactions.ts%22%2C%5B%22loadOlderMessages%22%2C%22markRead%22%2C%22startConversation%22%2C%22searchUsers%22%2C%22sendMessage%22%2C%22refreshConversations%22%5D%5D%2C%5B%22D%3A%5C%5CPortofolio%5C%5Cbaru%5C%5CWeb_app_chat_internal_akselera_tech%5C%5Csrc%5C%5Capp%5C%5C(auth)%5C%5Cactions.ts%22%2C%5B%22signOutAction%22%2C%22signUpAction%22%2C%22signInAction%22%5D%5D%5D&__client_imported__=true!",
+        "app/(app)/chat/[conversationId]/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5CPortofolio%5C%5Cbaru%5C%5CWeb_app_chat_internal_akselera_tech%5C%5Csrc%5C%5Capp%5C%5C(app)%5C%5Cchat%5C%5Cactions.ts%22%2C%5B%22loadOlderMessages%22%2C%22markRead%22%2C%22startConversation%22%2C%22searchUsers%22%2C%22sendMessage%22%2C%22refreshConversations%22%5D%5D%2C%5B%22D%3A%5C%5CPortofolio%5C%5Cbaru%5C%5CWeb_app_chat_internal_akselera_tech%5C%5Csrc%5C%5Capp%5C%5C(auth)%5C%5Cactions.ts%22%2C%5B%22signOutAction%22%2C%22signUpAction%22%2C%22signInAction%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/(app)/chat/page": "action-browser",
+        "app/(app)/chat/[conversationId]/page": "action-browser"
+      }
     }
   },
   "edge": {},
