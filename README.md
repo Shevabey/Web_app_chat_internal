@@ -132,7 +132,5 @@ AI digunakan sebagai alat bantu; keputusan keamanan tetap diverifikasi terhadap 
 ## Yang Belum Selesai dan Keterbatasan
 
 - Belum ada automated unit atau end-to-end test; verifikasi fitur masih membutuhkan pengujian manual dengan dua atau tiga akun.
-- Belum ada script `verify-rls` otomatis seperti yang direncanakan di dokumen arsitektur.
 - Presence hanya menunjukkan online/offline dan tidak menyimpan `last seen`.
 - Integrasi WhatsApp, group chat, attachment, edit/hapus pesan, reset password, push notification, dan PWA berada di luar scope.
-- Supabase free tier dapat berhenti sementara jika keep-alive production tidak dikonfigurasi.
